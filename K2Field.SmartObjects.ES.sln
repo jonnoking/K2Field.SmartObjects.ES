@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.Sandbox", "K2Field.SmartObjects.ES.Sandbox\K2Field.SmartObjects.ES.Sandbox.csproj", "{4BDA9B65-9699-44F2-8557-A751BAF11146}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.Web", "K2Field.SmartObjects.ES.Web\K2Field.SmartObjects.ES.Web.csproj", "{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BDA9B65-9699-44F2-8557-A751BAF11146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BDA9B65-9699-44F2-8557-A751BAF11146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BDA9B65-9699-44F2-8557-A751BAF11146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BDA9B65-9699-44F2-8557-A751BAF11146}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
