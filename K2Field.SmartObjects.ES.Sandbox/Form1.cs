@@ -131,6 +131,7 @@ namespace K2Field.SmartObjects.ES.Sandbox
 
             //add event to stream
             connection.AppendToStreamAsync("jonnoStream", ExpectedVersion.Any, ToEventData(Guid.NewGuid(), new TestEvent { EventName = "Foo", Message = "Some Message " +new Random().Next(), Name = txtId.Text }, txtEventName.Text));
+
             //connection.Close();
         }
 
@@ -161,6 +162,21 @@ namespace K2Field.SmartObjects.ES.Sandbox
             //_connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, 1113));
             //StartReading();
         }
+
+        private void btnCustomer_Click(object sender, EventArgs e)
+        {
+            var connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, 1113));
+            connection.ConnectAsync();
+
+            //add event to stream
+            connection.AppendToStreamAsync("jonnoStream", ExpectedVersion.Any, ToEventData(Guid.NewGuid(), new CustomerEvent { Name = "Foo"}, txtEventName.Text));
+
+        }
+    }
+
+    public class CustomerEvent
+    {
+        public string Name { get; set; }
     }
 
     public class TestEvent
