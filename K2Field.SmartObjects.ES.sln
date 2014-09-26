@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.San
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.Web", "K2Field.SmartObjects.ES.Web\K2Field.SmartObjects.ES.Web.csproj", "{5C97F008-139C-4CFF-82F3-4838DDAAD8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES", "K2Field.SmartObjects.ES\K2Field.SmartObjects.ES.csproj", "{D76580C1-26C9-4B76-B169-1969F8F19B0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.Services.ES", "K2Field.SmartObjects.ES\K2Field.SmartObjects.Services.ES.csproj", "{D76580C1-26C9-4B76-B169-1969F8F19B0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

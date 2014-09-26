@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SourceCode.SmartObjects.Services.ServiceSDK;
 
-namespace K2Field.SmartObject.Services.SplunkService
+namespace K2Field.SmartObjects.Services.ES
 {
     public class ServiceBroker : ServiceAssemblyBase
     {

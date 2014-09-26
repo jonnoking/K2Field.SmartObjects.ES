@@ -9,44 +9,21 @@ using SourceCode.SmartObjects.Services.ServiceSDK.Objects;
 using Attributes = SourceCode.SmartObjects.Services.ServiceSDK.Attributes;
 using SourceCode.SmartObjects.Services.ServiceSDK.Types;
 using EventStore.ClientAPI;
+using System.Net;
 
 
-namespace K2Field.SmartObjects.Services.SplunkService
+
+namespace K2Field.SmartObjects.Services.ES
 {
     [Attributes.ServiceObject("EventStoreEvent", "Event Store Event", "Event Store Event")]
     public class EventStoreEvent
     {
-        private string index = "";
-        [Attributes.Property("Index", SoType.Text, "Index", "Index")]
-        public string Index
+        private string stream = "";
+        [Attributes.Property("Stream", SoType.Text, "Stream", "Stream")]
+        public string Stream
         {
-            get { return index; }
-            set { index = value; }
-        }
-
-        private bool createindex = false;
-        [Attributes.Property("CreateIndex", SoType.YesNo, "Create Index", "Create Index")]
-        public bool CreateIndex
-        {
-            get { return createindex; }
-            set { createindex = value; }
-        }
-
-
-        private string source = "";
-        [Attributes.Property("Source", SoType.Text, "Source", "Source")]
-        public string Source
-        {
-            get { return source; }
-            set { source = value; }
-        }
-
-        private string sourcetype = "";
-        [Attributes.Property("SourceType", SoType.Text, "SourceType", "SourceType")]
-        public string SourceType
-        {
-            get { return sourcetype; }
-            set { sourcetype = value; }
+            get { return stream; }
+            set { stream = value; }
         }
 
         private string message = "";
@@ -57,8 +34,24 @@ namespace K2Field.SmartObjects.Services.SplunkService
             set { message = value; }
         }
 
+        private string eventname = "";
+        [Attributes.Property("EventName", SoType.Memo, "Event Name", "Event Name")]
+        public string EventName
+        {
+            get { return eventname; }
+            set { eventname = value; }
+        }
+
+        private string messagename = "";
+        [Attributes.Property("MessageName", SoType.Memo, "Message Name", "Message Name")]
+        public string MessageName
+        {
+            get { return messagename; }
+            set { messagename = value; }
+        }
+
         private string resultstatus = "";
-        [Attributes.Property("ResultStatus", SoType.Text, "ResultStatus", "ResultStatus")]
+        [Attributes.Property("ResultStatus", SoType.Text, "Result Status", "Result Status")]
         public string ResultStatus
         {
             get { return resultstatus; }
@@ -66,7 +59,7 @@ namespace K2Field.SmartObjects.Services.SplunkService
         }
 
         private string resultmessage = "";
-        [Attributes.Property("ResultMessage", SoType.Text, "ResultMessage", "ResultMessage")]
+        [Attributes.Property("ResultMessage", SoType.Text, "Result Message", "Result Message")]
         public string ResultMessage
         {
             get { return resultmessage; }
@@ -74,128 +67,50 @@ namespace K2Field.SmartObjects.Services.SplunkService
         }
 
 
-        [Attributes.Method("SubmitMessage", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Execute, "SubmitMessage", "SubmitMessage",
-        new string[] { "Message", "Index", "Source", "SourceType" }, //required property array (no required properties for this sample)
-        new string[] { "Message", "Index", "Source", "SourceType" }, //input property array (no optional input properties for this sample)
-        new string[] { "Message", "Index", "Source", "SourceType", "ResultStatus", "ResultMessage" })] //return property array (2 properties for this example)
-        public EventStoreEvent PostMessageToSplunk()
+        [Attributes.Method("AppendToStream", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Execute, "Append To Stream", "Append To Stream",
+        new string[] { "Stream", "Message", "EventName" }, //required property array (no required properties for this sample)
+        new string[] { "Stream", "Message", "EventName", "MessageName" }, //input property array (no optional input properties for this sample)
+        new string[] { "Stream", "Message", "EventName", "MessageName", "ResultStatus", "ResultMessage" })] //return property array (2 properties for this example)
+        public EventStoreEvent AppendToEventStoreStream()
         {
+            // eventstore address, port, auth should be configurable
             var connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, 1113));
-            connection.ConnectAsync();
-
-            //add event to stream
-            connection.AppendToStreamAsync("jonnoStream", ExpectedVersion.Any, ToEventData(Guid.NewGuid(), new TestEvent { EventName = "Foo", Message = "Some Message " + new Random().Next(), Name = txtId.Text }, txtEventName.Text));
-
-
-
             try
-            {
-                // Load connection info for Splunk server in .splunkrc file.
-                var cli = Command.Splunk("submit");
-                //cli.Parse(argv);
+            {                
+                connection.ConnectAsync().Wait();
 
-                string[] cargs = { };
-                cli.Parse(cargs);
-
-
-                var service = Splunk.Service.Connect(cli.Opts);
-
-                var args = new ReceiverSubmitArgs
+                K2EventStoreMessage msg = new K2EventStoreMessage();
+                msg.Id = Guid.NewGuid();
+                msg.Message = this.Message;
+                if (!string.IsNullOrWhiteSpace(this.MessageName))
                 {
-                    Index = this.Index,
-                    Source = this.Source,
-                    SourceType = this.SourceType
-                };
+                    msg.Name = this.MessageName;
+                }
 
-                var receiver = new Receiver(service);
-
-                receiver.Submit(args, message);
-
-                this.ResultStatus = "OK";
+                //add event to stream
+                WriteResult result = Task.Run(() => connection.AppendToStreamAsync(this.Stream, ExpectedVersion.Any, EventStoreUtils.ToEventData(Guid.NewGuid(), msg, this.EventName)).Result).Result;
+                this.resultstatus = "OK";
+                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.ResultStatus = "Error";
                 this.ResultMessage = ex.Message;
             }
-
-
-//            # Splunk host (default: localhost)
-//host=localhost
-//# Splunk admin port (default: 8089)
-//port=8089
-//# Splunk username
-//username=admin
-//# Splunk password
-//password=K2pass!
-//# Access scheme (default: https)
-//scheme=https
-
-//.splunkrc
-
-            return this;
-        }
-
-        [Attributes.Method("SubmitMessage", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Execute, "SubmitMessage", "SubmitMessage",
-        new string[] { "Message", "Index", "CreateIndex", "Source", "SourceType" }, //required property array (no required properties for this sample)
-        new string[] { "Message", "Index", "CreateIndex", "Source", "SourceType" }, //input property array (no optional input properties for this sample)
-        new string[] { "Message", "Index", "CreateIndex", "Source", "SourceType", "ResultStatus", "ResultMessage" })] //return property array (2 properties for this example)
-
-        public async Task<SplunkMessage> PostMessage()
-        {
-
-            using (var service = new Splunk.Client.Service(SdkHelper.Splunk.Scheme, SdkHelper.Splunk.Host, SdkHelper.Splunk.Port, new Splunk.Client.Namespace(user: "nobody", app: "K2")))
+            finally
             {
-
-                await service.LogOnAsync(SdkHelper.Splunk.Username, SdkHelper.Splunk.Password);
-
-                string indexName = this.Index;
-                Splunk.Client.Index index = await service.Indexes.GetOrNullAsync(indexName);
-
-                if (index == null && !this.CreateIndex)
-                {
-                    this.ResultStatus = "Error";
-                    this.ResultMessage = "Index does not exist";
-                    return this;
-                } else if (index == null && this.CreateIndex)
-                {
-                    index = await service.Indexes.CreateAsync(indexName);
-                }
-                else if (index == null)
-                {
-                    this.ResultStatus = "Error";
-                    this.ResultMessage = "Index does not exist";
-                    return this;
-                }
-                
-                try
-                {
-                    await index.EnableAsync();
-
-                    Splunk.Client.Transmitter transmitter = service.Transmitter;
-                    Splunk.Client.SearchResult result;
-                    
-                    result = await transmitter.SendAsync(this.Message, indexName);
-
-                    //using (var results = await service.SearchOneShotAsync(string.Format("search index={0}", indexName)))
-                    //{
-                    //    foreach (Splunk.Client.SearchResult task in results)
-                    //    {
-                    //        Console.WriteLine(task);
-                    //    }
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    this.ResultStatus = "Error";
-                    this.ResultMessage = ex.Message;
-                }
-
-                this.ResultStatus = "OK";
+                connection.Close();
             }
-
             return this;
         }
 
+    }
+
+    public class K2EventStoreMessage
+    {
+        public Guid Id { get; set; }
+        //public Guid? CorrelationId { get; set; }
+        public string Message { get; set; }
+        public string Name { get; set; }
     }
 }
