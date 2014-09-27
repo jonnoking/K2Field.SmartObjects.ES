@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.Services.ES", "K2Field.SmartObjects.ES\K2Field.SmartObjects.Services.ES.csproj", "{D76580C1-26C9-4B76-B169-1969F8F19B0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Field.SmartObjects.ES.Service", "K2Field.SmartObjects.ES.Service\K2Field.SmartObjects.ES.Service.csproj", "{5C5DFAB0-7A1D-4DC4-B72C-860C633F9092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D76580C1-26C9-4B76-B169-1969F8F19B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D76580C1-26C9-4B76-B169-1969F8F19B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76580C1-26C9-4B76-B169-1969F8F19B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C5DFAB0-7A1D-4DC4-B72C-860C633F9092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C5DFAB0-7A1D-4DC4-B72C-860C633F9092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C5DFAB0-7A1D-4DC4-B72C-860C633F9092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C5DFAB0-7A1D-4DC4-B72C-860C633F9092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
